@@ -39,9 +39,37 @@ export default function ChallengePage() {
   return (
     <div className="flex flex-col h-full w-full">
       <Header />
-      <ClientOnly fallback={<BaseChallengeWorkbench />}>
-        {() => <ChallengeWorkbench challenge={challenge} />}
-      </ClientOnly>
+      <div className="flex flex-1 overflow-hidden">
+        {/* Challenge Description Panel */}
+        <div className="w-80 border-r border-bolt-elements-borderColor bg-bolt-elements-background-depth-1 p-4 overflow-y-auto">
+          <div className="space-y-4">
+            <div>
+              <h1 className="text-xl font-semibold text-bolt-elements-textPrimary mb-2">
+                {challenge.title}
+              </h1>
+              <div className="text-sm text-bolt-elements-textSecondary">
+                Challenge ID: {challenge.id}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-sm font-medium text-bolt-elements-textPrimary mb-2">
+                Problem Statement
+              </h2>
+              <div className="text-sm text-bolt-elements-textSecondary whitespace-pre-line">
+                {challenge.question}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Editor and Preview Area */}
+        <div className="flex-1 flex">
+          <ClientOnly fallback={<BaseChallengeWorkbench />}>
+            {() => <ChallengeWorkbench />}
+          </ClientOnly>
+        </div>
+      </div>
     </div>
   );
 }
