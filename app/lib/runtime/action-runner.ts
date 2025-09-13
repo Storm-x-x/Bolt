@@ -8,7 +8,7 @@ import type { ActionCallbackData } from './message-parser';
 
 const logger = createScopedLogger('ActionRunner');
 
-export type ActionStatus = 'pending' | 'running' | 'complete' | 'aborted' | 'failed';
+export type ActionStatus = 'pending' | 'running' | 'dev-running' | 'complete' | 'aborted' | 'failed';
 
 export type BaseActionState = BoltAction & {
   status: Exclude<ActionStatus, 'failed'>;
@@ -98,7 +98,9 @@ export class ActionRunner {
   async #executeAction(actionId: string) {
     const action = this.actions.get()[actionId];
 
-    this.#updateAction(actionId, { status: 'running' });
+    // Check if this is a dev command and set appropriate status
+    const isDevCommand = action.type === 'shell' && /npm\s+run\s+dev/i.test(action.content);
+    this.#updateAction(actionId, { status: isDevCommand ? 'dev-running' : 'running' });
 
     try {
       switch (action.type) {

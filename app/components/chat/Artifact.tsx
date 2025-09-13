@@ -152,6 +152,8 @@ const ActionList = memo(({ actions }: ActionListProps) => {
                 <div className={classNames('text-lg', getIconColor(action.status))}>
                   {status === 'running' ? (
                     <div className="i-svg-spinners:90-ring-with-bg"></div>
+                  ) : status === 'dev-running' ? (
+                    <div className="i-ph:circle-fill animate-pulse scale-75"></div>
                   ) : status === 'pending' ? (
                     <div className="i-ph:circle-duotone"></div>
                   ) : status === 'complete' ? (
@@ -196,6 +198,9 @@ function getIconColor(status: ActionState['status']) {
     }
     case 'running': {
       return 'text-bolt-elements-loader-progress';
+    }
+    case 'dev-running': {
+      return 'text-bolt-elements-icon-success';
     }
     case 'complete': {
       return 'text-bolt-elements-icon-success';
