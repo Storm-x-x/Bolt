@@ -2,6 +2,7 @@ export interface Challenge {
   id: string;
   title: string;
   question: string;
+  image: string;
 }
 
 let challengesCache: Challenge[] | null = null;
