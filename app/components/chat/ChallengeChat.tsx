@@ -130,7 +130,7 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
                       minHeight: TEXTAREA_MIN_HEIGHT,
                       maxHeight: TEXTAREA_MAX_HEIGHT,
                     }}
-                    placeholder="Start your challenge by describing your approach..."
+                    placeholder="Start vibe coding here..."
                     translate="no"
                   />
                   <ClientOnly>
