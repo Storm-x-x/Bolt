@@ -31,7 +31,7 @@ const sliderOptions: SliderOptions<WorkbenchViewType> = {
   },
   right: {
     value: 'preview',
-    text: 'Preview',
+    text: 'Result',
   },
 };
 
@@ -121,6 +121,15 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
               <div className="flex items-center px-3 py-2 border-b border-bolt-elements-borderColor">
                 <Slider selected={selectedView} options={sliderOptions} setSelected={setSelectedView} />
                 <div className="ml-auto" />
+                {selectedView === 'preview' && (
+                  <PanelHeaderButton
+                    className="mr-1 text-sm flex items-center"
+                    onClick={() => console.log("todo")}
+                  >
+                    <div className="i-ph:target" />
+                    View Target
+                  </PanelHeaderButton>
+                )}
                 {selectedView === 'code' && (
                   <PanelHeaderButton
                     className="mr-1 text-sm"
