@@ -1,6 +1,10 @@
 import { useStore } from '@nanostores/react';
-import { description } from './useChatHistory';
+import { description, useChatHistory } from './useChatHistory';
 
 export function ChatDescription() {
-  return useStore(description);
+  const regularDescription = useStore(description);
+  const { chatData } = useChatHistory();
+
+  // Priority: Challenge title > Regular description
+  return chatData?.challengeData?.title || regularDescription;
 }

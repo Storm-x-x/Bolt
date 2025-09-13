@@ -85,8 +85,12 @@ export function useChatHistory() {
         setUrlId(urlId);
       }
 
-      if (!description.get() && firstArtifact?.title) {
-        description.set(firstArtifact?.title);
+      if (!description.get()) {
+        if (challengeContext?.challenge?.title) {
+          description.set(challengeContext.challenge.title);
+        } else if (firstArtifact?.title) {
+          description.set(firstArtifact?.title);
+        }
       }
 
       if (initialMessages.length === 0 && !chatId.get()) {
