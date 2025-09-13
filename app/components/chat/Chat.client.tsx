@@ -4,7 +4,7 @@ import { useChat } from 'ai/react';
 import { useAnimate } from 'framer-motion';
 import { memo, useEffect, useRef, useState } from 'react';
 import { cssTransition, toast, ToastContainer } from 'react-toastify';
-import { useMessageParser, usePromptEnhancer, useShortcuts, useSnapScroll } from '~/lib/hooks';
+import { useMessageParser, useShortcuts, useSnapScroll } from '~/lib/hooks';
 import { useChatHistory, type ChatHistoryItem } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
@@ -94,7 +94,6 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory, chatData }
     initialMessages,
   });
 
-  const { enhancingPrompt, promptEnhanced, enhancePrompt, resetEnhancer } = usePromptEnhancer();
   const { parsedMessages, parseMessages } = useMessageParser();
 
   const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
@@ -198,8 +197,6 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory, chatData }
 
     setInput('');
 
-    resetEnhancer();
-
     textareaRef.current?.blur();
   };
 
@@ -213,8 +210,6 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory, chatData }
       showChat={showChat}
       chatStarted={chatStarted}
       isStreaming={isLoading}
-      enhancingPrompt={enhancingPrompt}
-      promptEnhanced={promptEnhanced}
       sendMessage={sendMessage}
       messageRef={messageRef}
       scrollRef={scrollRef}
@@ -230,12 +225,6 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory, chatData }
           content: parsedMessages[i] || '',
         };
       })}
-      enhancePrompt={() => {
-        enhancePrompt(input, (input) => {
-          setInput(input);
-          scrollTextArea();
-        });
-      }}
     />
   );
 });

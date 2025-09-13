@@ -4,7 +4,7 @@ import { useChat } from 'ai/react';
 import { useAnimate } from 'framer-motion';
 import { memo, useEffect, useRef, useState } from 'react';
 import { cssTransition, toast, ToastContainer } from 'react-toastify';
-import { useMessageParser, usePromptEnhancer, useShortcuts, useSnapScroll } from '~/lib/hooks';
+import { useMessageParser, useShortcuts, useSnapScroll } from '~/lib/hooks';
 import { useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
@@ -100,7 +100,6 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
     initialMessages,
   });
 
-  const { enhancingPrompt, promptEnhanced, enhancePrompt, resetEnhancer } = usePromptEnhancer();
   const { parsedMessages, parseMessages } = useMessageParser();
 
   const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
@@ -208,8 +207,6 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
 
     setInput('');
 
-    resetEnhancer();
-
     textareaRef.current?.blur();
   };
 
@@ -224,8 +221,6 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
       showChat={showChat}
       chatStarted={chatStarted}
       isStreaming={isLoading}
-      enhancingPrompt={enhancingPrompt}
-      promptEnhanced={promptEnhanced}
       sendMessage={sendMessage}
       messageRef={messageRef}
       scrollRef={scrollRef}
@@ -241,12 +236,6 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
           content: parsedMessages[i] || '',
         };
       })}
-      enhancePrompt={() => {
-        enhancePrompt(input, (input) => {
-          setInput(input);
-          scrollTextArea();
-        });
-      }}
     />
   );
 });
