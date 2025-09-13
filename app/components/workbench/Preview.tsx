@@ -129,7 +129,8 @@ export const Preview = memo(({ showTarget = false, challengeData }: PreviewProps
                 alt="Target result"
                 className="max-w-full max-h-full object-contain"
               />
-              <div className="absolute bottom-4 right-4 text-white text-sm font-semibold opacity-70 bg-red-500/80 px-2 py-1 rounded">
+              <div className="absolute bottom-4 right-4 text-white text-sm font-semibold opacity-70 bg-red-500/80 px-2 py-1 rounded flex items-center gap-1">
+                <div className="i-ph:warning" />
                 VIEWING TARGET
               </div>
             </div>
