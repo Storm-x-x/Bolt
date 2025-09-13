@@ -48,6 +48,7 @@ export default function ProfilePage() {
       <Header />
       <main className="flex-1 flex items-center justify-center">
         <section className="w-full max-w-4xl mx-auto bg-bolt-elements-background-depth-2 rounded-2xl border border-bolt-elements-borderColor shadow-lg overflow-hidden">
+          {/* Profile header removed */}
           <div className="flex flex-col md:flex-row items-center md:items-end gap-8 md:gap-16 px-10 pt-12 pb-8 border-b border-bolt-elements-borderColor bg-bolt-elements-background-depth-2">
             <div className="flex flex-col items-center md:items-start">
               <div className="w-32 h-32 rounded-full bg-gradient-to-br from-green-400 via-yellow-400 to-red-400 flex items-center justify-center mb-4 shadow-xl border-4 border-white">
