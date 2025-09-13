@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__ide__getDiagnostics",
+      "WebSearch",
+      "Bash(pnpm update:*)",
+      "Bash(pnpm typecheck:*)",
+      "WebFetch(domain:ai-sdk.dev)",
+      "Bash(pnpm list:*)",
+      "WebFetch(domain:www.npmjs.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

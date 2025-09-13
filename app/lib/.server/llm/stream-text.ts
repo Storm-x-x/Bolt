@@ -1,6 +1,6 @@
 import { streamText as _streamText, convertToCoreMessages } from 'ai';
 import { getSystemPrompt } from './prompts';
-import { anthropic } from '@ai-sdk/anthropic';
+import { google } from "@ai-sdk/google"
 
 interface ToolResult<Name extends string, Args, Result> {
   toolCallId: string;
@@ -20,11 +20,13 @@ export type Messages = Message[];
 
 export type StreamingOptions = Omit<Parameters<typeof _streamText>[0], 'model'>;
 
-export function streamText(messages: Messages, env: Env, options?: StreamingOptions) {
+// Use anthropic directly
+
+export function streamText(messages: Messages, _env: Env, options?: StreamingOptions) {
   return _streamText({
-    model: anthropic("claude-sonnet-4-20250514"),
+    model: google("gemini-2.5-flash"),
     system: getSystemPrompt(),
-    messages: convertToCoreMessages(messages), 
+    messages: convertToCoreMessages(messages),
     ...options,
   });
 }
