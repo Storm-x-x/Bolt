@@ -2,9 +2,17 @@ import { useStore } from '@nanostores/react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { IconButton } from '~/components/ui/IconButton';
 import { workbenchStore } from '~/lib/stores/workbench';
+import { type Challenge } from '~/lib/challenges';
 import { PortDropdown } from './PortDropdown';
 
-export const Preview = memo(() => {
+interface PreviewProps {
+  showTarget?: boolean;
+  challengeData?: Challenge;
+}
+
+export const Preview = memo(({ showTarget = false, challengeData }: PreviewProps) => {
+  console.log('Preview component - showTarget:', showTarget, 'challengeData:', challengeData, 'image:', challengeData?.image);
+
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [activePreviewIndex, setActivePreviewIndex] = useState(0);
@@ -113,7 +121,27 @@ export const Preview = memo(() => {
         )}
       </div>
       <div className="flex-1 border-t border-bolt-elements-borderColor">
-        {activePreview ? (
+        {showTarget ? (
+          challengeData?.image ? (
+            <div className="w-full h-full bg-gray-500 flex justify-center items-center relative">
+              <img
+                src={challengeData.image}
+                alt="Target result"
+                className="max-w-full max-h-full object-contain"
+              />
+              <div className="absolute bottom-4 right-4 text-white text-sm font-semibold opacity-70 bg-red-500/80 px-2 py-1 rounded">
+                VIEWING TARGET
+              </div>
+            </div>
+          ) : (
+            <div className="flex w-full h-full justify-center items-center bg-gray-500 text-white">
+              <div className="text-center">
+                <div className="text-lg mb-2">No target image available</div>
+                <div className="text-sm opacity-70">This challenge doesn't have a target image set</div>
+              </div>
+            </div>
+          )
+        ) : activePreview ? (
           <iframe ref={iframeRef} className="border-none w-full h-full bg-white" src={iframeUrl} />
         ) : (
           <div className="flex w-full h-full justify-center items-center bg-white">No preview available</div>

@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react';
 import { motion, type HTMLMotionProps, type Variants } from 'framer-motion';
 import { computed } from 'nanostores';
-import { memo, useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   type OnChangeCallback as OnEditorChange,
@@ -14,6 +14,9 @@ import { workbenchStore, type WorkbenchViewType } from '~/lib/stores/workbench';
 import { classNames } from '~/utils/classNames';
 import { cubicEasingFn } from '~/utils/easings';
 import { renderLogger } from '~/utils/logger';
+import { useChatHistory } from '~/lib/persistence';
+import { description } from '~/lib/persistence/useChatHistory';
+import challengesData from '../../../data/challenges.json';
 import { EditorPanel } from './EditorPanel';
 import { Preview } from './Preview';
 
@@ -54,6 +57,19 @@ const workbenchVariants = {
 
 export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => {
   renderLogger.trace('Workbench');
+
+  const { chatData } = useChatHistory();
+  const [showTarget, setShowTarget] = useState(false);
+
+  // Fallback: Load challenge data directly if not available in chatData
+  const currentDescription = useStore(description);
+  const fallbackChallengeData = challengesData.find(challenge =>
+    challenge.title === currentDescription ||
+    currentDescription?.includes(challenge.title)
+  );
+
+  const effectiveChallengeData = chatData?.challengeData || fallbackChallengeData;
+  console.log('Workbench - effectiveChallengeData:', effectiveChallengeData);
 
   const hasPreview = useStore(computed(workbenchStore.previews, (previews) => previews.length > 0));
   const showWorkbench = useStore(workbenchStore.showWorkbench);
@@ -124,10 +140,10 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
                 {selectedView === 'preview' && (
                   <PanelHeaderButton
                     className="mr-1 text-sm flex items-center"
-                    onClick={() => console.log("todo")}
+                    onClick={() => setShowTarget(!showTarget)}
                   >
                     <div className="i-ph:target" />
-                    View Target
+                    {showTarget ? 'View Yours' : 'View Target'}
                   </PanelHeaderButton>
                 )}
                 {selectedView === 'code' && (
@@ -172,7 +188,7 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
                   initial={{ x: selectedView === 'preview' ? 0 : '100%' }}
                   animate={{ x: selectedView === 'preview' ? 0 : '100%' }}
                 >
-                  <Preview />
+                  <Preview showTarget={showTarget} challengeData={effectiveChallengeData} />
                 </View>
               </div>
             </div>
