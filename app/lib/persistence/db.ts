@@ -47,6 +47,8 @@ export async function setMessages(
   messages: Message[],
   urlId?: string,
   description?: string,
+  challengeId?: string,
+  challengeData?: any,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction('chats', 'readwrite');
@@ -58,6 +60,8 @@ export async function setMessages(
       urlId,
       description,
       timestamp: new Date().toISOString(),
+      challengeId,
+      challengeData,
     });
 
     request.onsuccess = () => resolve();
@@ -132,6 +136,25 @@ export async function getUrlId(db: IDBDatabase, id: string): Promise<string> {
 
     return `${id}-${i}`;
   }
+}
+
+export async function getChallengeNextId(db: IDBDatabase, challengeId: string): Promise<string> {
+  const idList = await getUrlIds(db);
+  const challengePrefix = `${challengeId}-v`;
+
+  // Find all existing challenge-based IDs
+  const existingVersions = idList
+    .filter(id => id && id.startsWith(challengePrefix))
+    .map(id => {
+      const versionMatch = id.match(new RegExp(`^${challengeId}-v(\\d+)$`));
+      return versionMatch ? parseInt(versionMatch[1], 10) : 0;
+    })
+    .filter(version => version > 0);
+
+  // Find the next version number
+  const nextVersion = existingVersions.length === 0 ? 1 : Math.max(...existingVersions) + 1;
+
+  return `${challengeId}-v${nextVersion}`;
 }
 
 async function getUrlIds(db: IDBDatabase): Promise<string[]> {

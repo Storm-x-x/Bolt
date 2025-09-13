@@ -9,6 +9,7 @@ import { useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { type Challenge } from '~/lib/challenges';
+import { setChallengeContext } from '~/lib/challengeSession';
 import { fileModificationsToHTML } from '~/utils/diff';
 import { cubicEasingFn } from '~/utils/easings';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
@@ -162,6 +163,11 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
 
     if (_input.length === 0 || isLoading) {
       return;
+    }
+
+    // Store challenge context when first message is sent
+    if (messages.length === 0) {
+      setChallengeContext(challenge.id, challenge);
     }
 
     /**

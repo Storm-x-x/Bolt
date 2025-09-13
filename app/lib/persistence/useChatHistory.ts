@@ -4,7 +4,9 @@ import { atom } from 'nanostores';
 import type { Message } from 'ai';
 import { toast } from 'react-toastify';
 import { workbenchStore } from '~/lib/stores/workbench';
-import { getMessages, getNextId, getUrlId, openDatabase, setMessages } from './db';
+import { type Challenge } from '~/lib/challenges';
+import { getChallengeContext, clearChallengeContext } from '~/lib/challengeSession';
+import { getMessages, getNextId, getUrlId, getChallengeNextId, openDatabase, setMessages } from './db';
 
 export interface ChatHistoryItem {
   id: string;
@@ -12,6 +14,8 @@ export interface ChatHistoryItem {
   description?: string;
   messages: Message[];
   timestamp: string;
+  challengeId?: string;
+  challengeData?: Challenge;
 }
 
 const persistenceEnabled = !import.meta.env.VITE_DISABLE_PERSISTENCE;
@@ -28,6 +32,7 @@ export function useChatHistory() {
   const [initialMessages, setInitialMessages] = useState<Message[]>([]);
   const [ready, setReady] = useState<boolean>(false);
   const [urlId, setUrlId] = useState<string | undefined>();
+  const [chatData, setChatData] = useState<ChatHistoryItem | undefined>();
 
   useEffect(() => {
     if (!db) {
@@ -46,6 +51,7 @@ export function useChatHistory() {
           if (storedMessages && storedMessages.messages.length > 0) {
             setInitialMessages(storedMessages.messages);
             setUrlId(storedMessages.urlId);
+            setChatData(storedMessages);
             description.set(storedMessages.description);
             chatId.set(storedMessages.id);
           } else {
@@ -63,12 +69,14 @@ export function useChatHistory() {
   return {
     ready: !mixedId || ready,
     initialMessages,
+    chatData,
     storeMessageHistory: async (messages: Message[]) => {
       if (!db || messages.length === 0) {
         return;
       }
 
       const { firstArtifact } = workbenchStore;
+      const challengeContext = getChallengeContext();
 
       if (!urlId && firstArtifact?.id) {
         const urlId = await getUrlId(db, firstArtifact.id);
@@ -82,16 +90,39 @@ export function useChatHistory() {
       }
 
       if (initialMessages.length === 0 && !chatId.get()) {
-        const nextId = await getNextId(db);
+        let nextId: string;
+        let generatedUrlId: string;
+
+        if (challengeContext) {
+          // Generate challenge-based ID
+          generatedUrlId = await getChallengeNextId(db, challengeContext.challengeId);
+          nextId = await getNextId(db);
+
+          // Clear challenge context after first use
+          clearChallengeContext();
+        } else {
+          // Regular ID generation
+          nextId = await getNextId(db);
+          generatedUrlId = urlId || nextId;
+        }
 
         chatId.set(nextId);
 
         if (!urlId) {
-          navigateChat(nextId);
+          navigateChat(generatedUrlId);
+          setUrlId(generatedUrlId);
         }
       }
 
-      await setMessages(db, chatId.get() as string, messages, urlId, description.get());
+      await setMessages(
+        db,
+        chatId.get() as string,
+        messages,
+        urlId,
+        description.get(),
+        challengeContext?.challengeId,
+        challengeContext?.challenge
+      );
     },
   };
 }
