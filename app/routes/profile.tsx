@@ -48,7 +48,6 @@ export default function ProfilePage() {
       <Header />
       <main className="flex-1 flex items-center justify-center">
         <section className="w-full max-w-4xl mx-auto bg-bolt-elements-background-depth-2 rounded-2xl border border-bolt-elements-borderColor shadow-lg overflow-hidden">
-          {/* Profile header */}
           <div className="flex flex-col md:flex-row items-center md:items-end gap-8 md:gap-16 px-10 pt-12 pb-8 border-b border-bolt-elements-borderColor bg-bolt-elements-background-depth-2">
             <div className="flex flex-col items-center md:items-start">
               <div className="w-32 h-32 rounded-full bg-gradient-to-br from-green-400 via-yellow-400 to-red-400 flex items-center justify-center mb-4 shadow-xl border-4 border-white">
@@ -96,17 +95,17 @@ export default function ProfilePage() {
             </div>
           </div>
           {/* Progress section */}
-          <div className="px-10 py-10 bg-bolt-elements-background-depth-1">
+          <div className="px-10 py-10 bg-bolt-elements-background-depth-1 flex flex-col items-center justify-center">
             {/* Add more detail: stats table */}
-            <div className="mt-10">
+            <div className="mt-10 w-full flex flex-col items-center">
               <button
-                className="text-white bg-bolt-elements-background-depth-2 px-4 py-2 rounded font-bold mb-4 flex items-center gap-2 hover:bg-bolt-elements-background-depth-1 transition"
+                className="text-lg text-white bg-bolt-elements-background-depth-2 px-6 py-3 rounded font-bold mb-4 flex items-center gap-2 hover:bg-bolt-elements-background-depth-1 transition shadow-lg"
                 onClick={() => setShowStats((s) => !s)}
                 aria-expanded={showStats}
               >
-                <span>Statistics</span>
+                <span className="text-xl">Statistics</span>
                 <svg
-                  className={`w-4 h-4 transition-transform ${showStats ? 'rotate-180' : ''}`}
+                  className={`w-5 h-5 transition-transform ${showStats ? 'rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -116,30 +115,30 @@ export default function ProfilePage() {
                 </svg>
               </button>
               {showStats && (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-sm text-left border-collapse">
+                <div className="overflow-x-auto w-full max-w-md mx-auto">
+                  <table className="min-w-full text-lg text-left border-collapse">
                     <thead>
                       <tr className="bg-bolt-elements-background-depth-2">
-                        <th className="px-4 py-2 font-semibold text-white">Category</th>
-                        <th className="px-4 py-2 font-semibold text-white">Value</th>
+                        <th className="px-4 py-2 font-semibold text-white text-lg">Category</th>
+                        <th className="px-4 py-2 font-semibold text-white text-lg">Value</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="px-4 py-2 text-white">Average Acceptance Rate</td>
-                        <td className="px-4 py-2 text-white">92%</td>
+                        <td className="px-4 py-2 text-white text-base">Average Acceptance Rate</td>
+                        <td className="px-4 py-2 text-white text-base">92%</td>
                       </tr>
                       <tr className="bg-bolt-elements-background-depth-2/50">
-                        <td className="px-4 py-2 text-white">Longest Streak</td>
-                        <td className="px-4 py-2 text-white">12 days</td>
+                        <td className="px-4 py-2 text-white text-base">Longest Streak</td>
+                        <td className="px-4 py-2 text-white text-base">12 days</td>
                       </tr>
                       <tr>
-                        <td className="px-4 py-2 text-white">Last Submission</td>
-                        <td className="px-4 py-2 text-white">2 days ago</td>
+                        <td className="px-4 py-2 text-white text-base">Last Submission</td>
+                        <td className="px-4 py-2 text-white text-base">2 days ago</td>
                       </tr>
                       <tr className="bg-bolt-elements-background-depth-2/50">
-                        <td className="px-4 py-2 text-white">Total Submissions</td>
-                        <td className="px-4 py-2 text-white">128</td>
+                        <td className="px-4 py-2 text-white text-base">Total Submissions</td>
+                        <td className="px-4 py-2 text-white text-base">128</td>
                       </tr>
                     </tbody>
                   </table>
