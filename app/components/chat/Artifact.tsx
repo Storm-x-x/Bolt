@@ -58,9 +58,12 @@ export const Artifact = memo(({ messageId }: ArtifactProps) => {
             workbenchStore.showWorkbench.set(!showWorkbench);
           }}
         >
-          <div className="px-5 p-3.5 w-full text-left">
-            <div className="w-full text-bolt-elements-textPrimary font-medium leading-5 text-sm">{artifact?.title}</div>
-            <div className="w-full w-full text-bolt-elements-textSecondary text-xs mt-0.5">Click to open Workbench</div>
+          <div className="px-5 p-3.5 w-full text-left flex items-center gap-3">
+            <div className="i-bolt:monitor text-lg text-bolt-elements-textSecondary" />
+            <div className="flex-1">
+              <div className="w-full text-bolt-elements-textPrimary font-medium leading-5 text-sm">{artifact?.title}</div>
+              <div className="w-full text-bolt-elements-textSecondary text-xs mt-0.5">Click to open Workbench</div>
+            </div>
           </div>
         </button>
         <div className="bg-bolt-elements-artifacts-borderColor w-[1px]" />
