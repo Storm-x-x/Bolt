@@ -8,6 +8,7 @@ import { useMessageParser, usePromptEnhancer, useShortcuts, useSnapScroll } from
 import { useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
+import { type Challenge } from '~/lib/challenges';
 import { fileModificationsToHTML } from '~/utils/diff';
 import { cubicEasingFn } from '~/utils/easings';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
@@ -20,14 +21,24 @@ const toastAnimation = cssTransition({
 
 const logger = createScopedLogger('ChallengeChat');
 
-export function ChallengeChatClient() {
+interface ChallengeChatClientProps {
+  challenge: Challenge;
+}
+
+export function ChallengeChatClient({ challenge }: ChallengeChatClientProps) {
   renderLogger.trace('ChallengeChat');
 
   const { ready, initialMessages, storeMessageHistory } = useChatHistory();
 
   return (
     <>
-      {ready && <ChallengeChatImpl initialMessages={initialMessages} storeMessageHistory={storeMessageHistory} />}
+      {ready && (
+        <ChallengeChatImpl
+          challenge={challenge}
+          initialMessages={initialMessages}
+          storeMessageHistory={storeMessageHistory}
+        />
+      )}
       <ToastContainer
         closeButton={({ closeToast }) => {
           return (
@@ -60,11 +71,12 @@ export function ChallengeChatClient() {
 }
 
 interface ChallengeChatProps {
+  challenge: Challenge;
   initialMessages: Message[];
   storeMessageHistory: (messages: Message[]) => Promise<void>;
 }
 
-export const ChallengeChatImpl = memo(({ initialMessages, storeMessageHistory }: ChallengeChatProps) => {
+export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessageHistory }: ChallengeChatProps) => {
   useShortcuts();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -200,6 +212,7 @@ export const ChallengeChatImpl = memo(({ initialMessages, storeMessageHistory }:
   return (
     <ChallengeChatBase
       ref={animationScope}
+      challenge={challenge}
       textareaRef={textareaRef}
       input={input}
       showChat={showChat}

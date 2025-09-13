@@ -5,12 +5,14 @@ import { Menu } from '~/components/sidebar/Menu.client';
 import { IconButton } from '~/components/ui/IconButton';
 import { Workbench } from '~/components/workbench/Workbench.client';
 import { classNames } from '~/utils/classNames';
+import { type Challenge } from '~/lib/challenges';
 import { Messages } from './Messages.client';
 import { SendButton } from './SendButton.client';
 
 import styles from './BaseChat.module.scss';
 
 interface ChallengeChatProps {
+  challenge: Challenge;
   textareaRef?: React.RefObject<HTMLTextAreaElement> | undefined;
   messageRef?: RefCallback<HTMLDivElement> | undefined;
   scrollRef?: RefCallback<HTMLDivElement> | undefined;
@@ -32,6 +34,7 @@ const TEXTAREA_MIN_HEIGHT = 76;
 export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps>(
   (
     {
+      challenge,
       textareaRef,
       messageRef,
       scrollRef,
@@ -66,11 +69,11 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
             {!chatStarted && (
               <div id="challenge-intro" className="mt-[26vh] max-w-chat mx-auto text-center">
                 <h1 className="text-5xl font-bold text-bolt-elements-textPrimary mb-4">
-                  Build a counter
+                  {challenge.title}
                 </h1>
                 <div className="mb-6 text-bolt-elements-textSecondary space-y-2">
                   <p className="text-lg">
-                    Create a React component with increment and decrement buttons that updates a counter value.
+                    {challenge.question}
                   </p>
                   <p className="text-sm font-medium text-bolt-elements-textTertiary">
                     Your challenge timer will start right after the first prompt
