@@ -4,8 +4,7 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { ChallengeChat as ChallengeChatFallback } from '~/components/chat/ChallengeChat';
 import { ChallengeChatClient } from '~/components/chat/ChallengeChat.client';
 import { getChallengeById, type Challenge } from '~/lib/challenges';
-import { BackToChallengesButton } from '~/components/challenge/BackToChallengesButton';
-import { ChallengeTimer } from '~/components/challenge/ChallengeTimer';
+import { ChallengeNavbar } from '~/components/challenge/ChallengeNavbar';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const title = data?.challenge ? `${data.challenge.title} - Challenge` : 'Challenge Not Found';
@@ -31,9 +30,21 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function Challenge() {
   const { challenge } = useLoaderData<typeof loader>();
 
+  // timer duration based on difficulty
+  const duration = challenge.difficulty === 'Easy' ? 10 * 60 : challenge.difficulty === 'Medium' ? 15 * 60 : 20 * 60;
+
   return (
     <div className="flex flex-col h-full w-full relative">
-      <BackToChallengesButton />
+      <ChallengeNavbar
+        challenge={challenge}
+        timerProps={{ start: true, duration }}
+        onSubmit={() => {
+          if (challenge?.id) {
+            localStorage.setItem(`challenge-solved-${challenge.id}`, '1');
+            window.dispatchEvent(new CustomEvent('challenge:submit', { detail: { id: challenge.id } }));
+          }
+        }}
+      />
       <ClientOnly fallback={<ChallengeChatFallback challenge={challenge} />}>
         {() => <ChallengeChatClient challenge={challenge} />}
       </ClientOnly>

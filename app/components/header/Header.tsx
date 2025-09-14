@@ -4,9 +4,9 @@ export function Header({ className = '' }: { className?: string } = {}) {
   const location = useLocation();
   return (
     <header className={`w-full bg-[#201d2b] flex items-center justify-between px-8 py-4 shadow-md z-10 ${className}`}>
-      <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+      <Link to="/" className="flex items-center gap-2 text-xl font-extrabold text-white tracking-tight hover:underline focus:outline-none">
         <img src="/logoooo-removebg-preview.png" alt="Promptly Logo" className="h-9 w-9" />
-        <span className="text-xl font-extrabold text-white tracking-tight">Promptly</span>
+        <span>Promptly</span>
       </Link>
       <nav className="flex items-center gap-8">
         <Link

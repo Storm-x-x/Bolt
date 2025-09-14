@@ -6,7 +6,7 @@ export function BackToChallengesButton() {
   return (
     <button
       onClick={() => navigate('/')}
-      className="absolute top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 rounded-lg bg-bolt-elements-button-secondary-background hover:bg-bolt-elements-button-secondary-backgroundHover text-bolt-elements-button-secondary-text font-semibold shadow border border-bolt-elements-borderColor transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60"
+      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-bolt-elements-button-secondary-background hover:bg-bolt-elements-button-secondary-backgroundHover text-bolt-elements-button-secondary-text font-semibold shadow border border-bolt-elements-borderColor transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60"
       style={{ minWidth: 0 }}
     >
       <svg width="20" height="20" fill="none" viewBox="0 0 20 20" className="inline-block mr-1">

@@ -11,7 +11,14 @@ interface PreviewProps {
 }
 
 export const Preview = memo(({ showTarget = false, challengeData }: PreviewProps) => {
-  console.log('Preview component - showTarget:', showTarget, 'challengeData:', challengeData, 'image:', challengeData?.image);
+  console.log(
+    'Preview component - showTarget:',
+    showTarget,
+    'challengeData:',
+    challengeData,
+    'image:',
+    challengeData?.image,
+  );
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -123,11 +130,12 @@ export const Preview = memo(({ showTarget = false, challengeData }: PreviewProps
       <div className="flex-1 border-t border-bolt-elements-borderColor">
         {showTarget ? (
           challengeData?.image ? (
-            <div className="w-full h-full bg-gray-500 flex justify-center items-center relative">
+            <div className="w-full h-full bg-gray-500 flex justify-center items-center relative p-0">
               <img
                 src={challengeData.image}
                 alt="Target result"
-                className="max-w-full max-h-full object-contain"
+                className="w-auto h-auto max-h-[92vh] object-contain bg-white"
+                style={{ maxWidth: '100%' }}
               />
               <div className="absolute bottom-4 right-4 text-white text-sm font-semibold opacity-70 bg-red-500/80 px-2 py-1 rounded flex items-center gap-1">
                 <div className="i-ph:warning" />
