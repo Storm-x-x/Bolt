@@ -72,14 +72,17 @@ export default function Index() {
           </div>
           {/* End of Solve Challenges header */}
           {/* Just a big search bar */}
-          <div className="mt-20 mb-8 bg-bolt-elements-background-depth-2 rounded-xl border border-bolt-elements-borderColor shadow-lg p-6 w-full max-w-4xl mx-auto transition-all duration-200">
-            <input
-              type="text"
-              placeholder="Search challenges..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg px-6 py-2 border-0 bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60 transition shadow-md text-lg font-medium placeholder:text-bolt-elements-textSecondary"
-            />
+          <div className="mt-12 mb-8 bg-bolt-elements-background-depth-2 rounded-xl border border-bolt-elements-borderColor shadow-lg p-6 w-full max-w-4xl mx-auto transition-all duration-200">
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 i-ph:magnifying-glass text-xl text-bolt-elements-textSecondary pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Search challenges..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full rounded-lg pl-14 pr-6 py-2 border-0 bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60 transition shadow-md text-lg font-medium placeholder:text-bolt-elements-textSecondary"
+              />
+            </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pb-16">
             {sorted.map((challenge) => (
