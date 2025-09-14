@@ -1,6 +1,6 @@
 import { Header } from '~/components/header/Header';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import { WeeklyActivityChart } from '~/components/profile/WeeklyActivityChart';
 // dummy data for demonstration
 const userStats = {
   name: 'Azam Jawad Butt',
@@ -43,11 +43,50 @@ function ProgressBar({ value, max, color }: ProgressBarProps) {
 export default function ProfilePage() {
   const [showStats, setShowStats] = useState(false);
 
+  // Example weekly activity data
+  const weeklyActivity = [
+    { week: 'Week 1', count: 2 },
+    { week: 'Week 2', count: 5 },
+    { week: 'Week 3', count: 3 },
+    { week: 'Week 4', count: 7 },
+    { week: 'Week 5', count: 4 },
+    { week: 'Week 6', count: 6 },
+    { week: 'Week 7', count: 8 },
+  ];
+
+  // Get solved challenge IDs from sessionStorage
+  const [solvedChallenges, setSolvedChallenges] = useState<string[]>([]);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const solved: string[] = [];
+
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+
+        if (key && key.startsWith('solved-') && sessionStorage.getItem(key) === 'true') {
+          solved.push(key.replace('solved-', ''));
+        }
+      }
+      setSolvedChallenges(solved);
+    }
+  }, []);
+
+  // Import challenges list from _index.tsx (copy here for now)
+  const challenges = [
+    { id: '1', title: 'Sales Dashboard', image: '/sales-dashboard.png', difficulty: 'Hard', averageAccuracy: 62 },
+    { id: '2', title: 'Login Box', image: '/login.png', difficulty: 'Medium', averageAccuracy: 91 },
+    { id: '3', title: 'Google Drive', image: '/Folders.png', difficulty: 'Medium', averageAccuracy: 87 },
+    { id: '4', title: 'Profile Page', image: '/profile.jpg', difficulty: 'Hard', averageAccuracy: 74 },
+    { id: '5', title: 'Counter', image: '/counter.gif', difficulty: 'Easy', averageAccuracy: 68 },
+    { id: '6', title: 'Weather Forecast', image: '/weather-app.png', difficulty: 'Medium', averageAccuracy: 41 },
+  ];
+  const solvedChallengeData = challenges.filter((c) => solvedChallenges.includes(c.id));
+
   return (
     <div className="flex flex-col h-full min-h-screen w-full bg-bolt-elements-background-depth-1">
       <Header />
-      <main className="flex-1 flex items-center justify-center">
-        <section className="w-full max-w-4xl mx-auto bg-bolt-elements-background-depth-2 rounded-2xl border border-bolt-elements-borderColor shadow-lg overflow-hidden">
+      <main className="flex-1 w-full pt-10 pb-20 px-4">
+        <section className="w-full max-w-4xl mx-auto bg-bolt-elements-background-depth-2 rounded-2xl border border-bolt-elements-borderColor shadow-lg overflow-hidden mb-10">
           {/* Profile header removed */}
           <div className="flex flex-col md:flex-row items-center md:items-end gap-8 md:gap-16 px-10 pt-12 pb-8 border-b border-bolt-elements-borderColor bg-bolt-elements-background-depth-2">
             <div className="flex flex-col items-center md:items-start">
@@ -95,56 +134,44 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
-          {/* Progress section */}
-          <div className="px-10 py-10 bg-bolt-elements-background-depth-1 flex flex-col items-center justify-center">
-            {/* Add more detail: stats table */}
-            <div className="mt-10 w-full flex flex-col items-center">
-              <button
-                className="text-lg text-white bg-bolt-elements-background-depth-2 px-6 py-3 rounded font-bold mb-4 flex items-center gap-2 hover:bg-bolt-elements-background-depth-1 transition shadow-lg"
-                onClick={() => setShowStats((s) => !s)}
-                aria-expanded={showStats}
-              >
-                <span className="text-xl">Statistics</span>
-                <svg
-                  className={`w-5 h-5 transition-transform ${showStats ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {showStats && (
-                <div className="overflow-x-auto w-full max-w-md mx-auto">
-                  <table className="min-w-full text-lg text-left border-collapse">
-                    <thead>
-                      <tr className="bg-bolt-elements-background-depth-2">
-                        <th className="px-4 py-2 font-semibold text-white text-lg">Category</th>
-                        <th className="px-4 py-2 font-semibold text-white text-lg">Value</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="px-4 py-2 text-white text-base">Average Acceptance Rate</td>
-                        <td className="px-4 py-2 text-white text-base">92%</td>
-                      </tr>
-                      <tr className="bg-bolt-elements-background-depth-2/50">
-                        <td className="px-4 py-2 text-white text-base">Longest Streak</td>
-                        <td className="px-4 py-2 text-white text-base">12 days</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-2 text-white text-base">Last Submission</td>
-                        <td className="px-4 py-2 text-white text-base">2 days ago</td>
-                      </tr>
-                      <tr className="bg-bolt-elements-background-depth-2/50">
-                        <td className="px-4 py-2 text-white text-base">Total Submissions</td>
-                        <td className="px-4 py-2 text-white text-base">128</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              )}
+          {/* Weekly Activity Chart + Statistics side by side */}
+          <div
+            className="flex flex-col md:flex-row gap-8 px-0 py-0 bg-bolt-elements-background-depth-1 items-center justify-center md:items-center md:justify-center min-h-[340px]"
+            style={{ boxShadow: 'none', border: 'none' }}
+          >
+            <div className="w-full md:w-1/2 px-10 py-8 flex items-center justify-center">
+              <WeeklyActivityChart data={weeklyActivity} small />
+            </div>
+            <div className="w-full md:w-1/2 px-10 py-8 flex flex-col justify-center">
+              <h2 className="text-xl font-bold text-bolt-elements-textPrimary mb-4 text-left">Statistics</h2>
+              <div className="overflow-x-auto w-full">
+                <table className="min-w-full text-lg text-left border-collapse">
+                  <thead>
+                    <tr className="bg-bolt-elements-background-depth-2">
+                      <th className="px-4 py-2 font-semibold text-white text-lg text-left">Category</th>
+                      <th className="px-4 py-2 font-semibold text-white text-lg text-left">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 text-white text-base">Average Acceptance Rate</td>
+                      <td className="px-4 py-2 text-white text-base">92%</td>
+                    </tr>
+                    <tr className="bg-bolt-elements-background-depth-2/50">
+                      <td className="px-4 py-2 text-white text-base">Longest Streak</td>
+                      <td className="px-4 py-2 text-white text-base">12 days</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 text-white text-base">Last Submission</td>
+                      <td className="px-4 py-2 text-white text-base">2 days ago</td>
+                    </tr>
+                    <tr className="bg-bolt-elements-background-depth-2/50">
+                      <td className="px-4 py-2 text-white text-base">Total Submissions</td>
+                      <td className="px-4 py-2 text-white text-base">128</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
