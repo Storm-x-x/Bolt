@@ -61,6 +61,24 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
               <div id="challenge-intro" className="mt-16 max-w-chat mx-auto text-center">
+                <img
+                  src={challenge.image}
+                  alt={challenge.title}
+                  className="mx-auto mb-6 rounded-lg shadow-md max-h-48"
+                />
+                <div className="mb-4">
+                  <h1 className="text-3xl text-white font-bold mb-4">{challenge.title}</h1>
+                  <span
+                    className={classNames(
+                      "inline-block px-3 py-1 rounded-full text-sm font-semibold",
+                      challenge.difficulty === "Easy" ? "bg-green-100 text-green-700" : "",
+                      challenge.difficulty === "Medium" ? "bg-yellow-100 text-yellow-800" : "",
+                      challenge.difficulty === "Hard" ? "bg-red-100 text-red-700" : ""
+                    )}
+                  >
+                    {challenge.difficulty}
+                  </span>
+                </div>
                 <div className="mb-4 text-bolt-elements-textSecondary space-y-2">
                   <hr className="my-6 border-t border-bolt-elements-borderColor w-1/2 mx-auto" />
                   <p className="text-sm font-medium text-bolt-elements-textTertiary mb-2">
