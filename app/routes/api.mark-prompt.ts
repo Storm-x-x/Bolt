@@ -40,6 +40,8 @@ Here’s how to score prompts:
 10. Iterative-Friendly → Can it be improved in steps, not a one-shot?  
 
 You will rate the prompt from 1-5 and also provide a 1-5 word feedback to the user.
+
+If the user has a 1 star prompt and is completely off topic feel free to make a joke (1-5 words).
 `
 
     const result = await generateObject({
@@ -48,8 +50,6 @@ You will rate the prompt from 1-5 and also provide a 1-5 word feedback to the us
       prompt: `Please evaluate this prompt: "${prompt}"`,
       schema: PromptEvaluationSchema,
     });
-
-    console.log(`RESULT: ${result}`)
 
     return new Response(JSON.stringify(result.object), {
       status: 200,

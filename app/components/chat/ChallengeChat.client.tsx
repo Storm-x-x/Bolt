@@ -4,7 +4,7 @@ import { useChat } from 'ai/react';
 import { useAnimate } from 'framer-motion';
 import { memo, useEffect, useRef, useState } from 'react';
 import { cssTransition, toast, ToastContainer } from 'react-toastify';
-import { useMessageParser, useShortcuts, useSnapScroll } from '~/lib/hooks';
+import { useAudio, useMessageParser, useShortcuts, useSnapScroll } from '~/lib/hooks';
 import { useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
@@ -13,6 +13,7 @@ import { setChallengeContext } from '~/lib/challengeSession';
 import { fileModificationsToHTML } from '~/utils/diff';
 import { cubicEasingFn } from '~/utils/easings';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
+import { sendPromptStatusToast } from '~/utils/promptToast';
 import { ChallengeChat as ChallengeChatBase } from './ChallengeChat';
 
 const toastAnimation = cssTransition({
@@ -79,6 +80,8 @@ interface ChallengeChatProps {
 
 export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessageHistory }: ChallengeChatProps) => {
   useShortcuts();
+
+  const { playSuccess, playFailure } = useAudio();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -204,6 +207,25 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
     }
 
     setInput('');
+
+    // Mark the prompt (non-blocking)
+    fetch('/api/mark-prompt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: _input, question: challenge.title }),
+    })
+      .then((response) => response.json())
+      .then((data: any) => {
+        const message = data.message || 'Prompt evaluated';
+        const rating = data.rating || 3;
+        sendPromptStatusToast(message, rating, playSuccess, playFailure);
+      })
+      .catch((error) => {
+        console.error('Error marking prompt:', error);
+        sendPromptStatusToast('Unable to evaluate prompt', 2, playSuccess, playFailure);
+      });
 
     textareaRef.current?.blur();
   };
