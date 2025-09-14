@@ -28,37 +28,36 @@ const challenges: Challenge[] = [
     id: '2',
     title: 'Login Box',
     image: '/login.png',
-    difficulty: 'Easy',
+    difficulty: 'Medium',
     averageAccuracy: 91,
   },
   {
     id: '3',
     title: 'Google Drive',
     image: '/Folders.png',
-    difficulty: 'Easy',
+    difficulty: 'Medium',
     averageAccuracy: 87,
   },
   {
     id: '4',
     title: 'Profile Page',
     image: '/profile.jpg',
-    difficulty: 'Medium',
+    difficulty: 'Hard',
     averageAccuracy: 74,
     description: 'Determine whether an integer is a palindrome.',
   },
   {
     id: '5',
-    title: 'Merge Intervals',
-    image: '/project-visibility.jpg',
-    difficulty: 'Medium',
+    title: 'Counter',
+    image: '/counter.gif',
+    difficulty: 'Easy',
     averageAccuracy: 68,
-    description: 'Merge all overlapping intervals in a list of intervals.',
   },
   {
     id: '6',
-    title: 'N-Queens',
-    image: '/social_preview_index.jpg',
-    difficulty: 'Hard',
+    title: 'Weather Forecast',
+    image: '/weather-app.png',
+    difficulty: 'Medium',
     averageAccuracy: 41,
     description: 'Place N queens on an N×N chessboard so that no two queens threaten each other.',
   },
@@ -101,31 +100,36 @@ export default function Index() {
   });
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full min-h-screen w-full bg-bolt-elements-background-depth-1">
       <Header />
-      <div className="min-h-screen bg-bolt-elements-background-depth-1 py-10 px-4">
+      <div className="flex-1 min-h-screen bg-bolt-elements-background-depth-1 py-10 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="w-full px-0 md:px-0">
             <div
-              className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4 w-full bg-gradient-to-r from-purple-700 via-fuchsia-600 to-purple-400 rounded-lg shadow-lg border-0 p-4 md:p-6 transition-all duration-200"
+              className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4 w-full bg-bolt-elements-background-depth-2 rounded-lg shadow-lg border-0 p-6 md:p-10 transition-all duration-200 relative"
               style={{
-                minHeight: '90px',
-                width: '100vw',
-                left: '50%',
-                right: '50%',
-                marginLeft: '-50vw',
-                marginRight: '-50vw',
+                minHeight: '110px',
+                width: '100%',
                 position: 'relative',
+                marginLeft: 0,
+                marginRight: 0,
+                left: 'unset',
+                right: 'unset',
               }}
             >
-              <div className="flex-1 min-w-0">
-                <h1 className="text-4xl font-extrabold text-white tracking-tight drop-shadow-lg mb-1 leading-tight">
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <h1 className="text-5xl font-extrabold text-white tracking-tight drop-shadow-lg mb-2 leading-tight text-center md:text-left">
                   Solve Challenges
                 </h1>
-                <p className="text-base text-white/80 font-medium mt-0 drop-shadow-sm">
+                <p className="text-lg text-white/80 font-medium mt-0 drop-shadow-sm text-center md:text-left">
                   Browse and solve interactive UI challenges to sharpen your frontend skills.
                 </p>
               </div>
+              <img
+                src="/logoooo-removebg-preview.png"
+                alt="Logo"
+                className="h-20 w-auto object-contain absolute right-8 top-1/2 -translate-y-1/2 hidden md:block"
+              />
             </div>
           </div>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 bg-bolt-elements-background-depth-2 rounded-xl border border-bolt-elements-borderColor shadow-lg p-6 w-full max-w-4xl mx-auto transition-all duration-200">
@@ -175,7 +179,20 @@ export default function Index() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {sorted.map((challenge) => (
-              <ChallengeCard key={challenge.id} {...challenge} onClick={() => navigate(`/challenge/${challenge.id}`)} />
+              <ChallengeCard
+                key={challenge.id}
+                {...challenge}
+                onClick={() =>
+                  navigate('/challenge/counter', {
+                    state: {
+                      image: challenge.image,
+                      title: challenge.title,
+                      difficulty: challenge.difficulty,
+                    },
+                    replace: true,
+                  })
+                }
+              />
             ))}
           </div>
         </div>

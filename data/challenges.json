@@ -3,12 +3,14 @@
     "id": "counter",
     "title": "Build a Counter",
     "question": "Make a click counter with +, -, and reset buttons. The value must never go below 0.",
-    "image": "/Folders.png"
+    "image": "/counter.gif",
+    "difficulty": "Easy"
   },
   {
     "id": "todo",
     "title": "Todo List",
     "question": "Build a todo list with add and delete functionality.",
-    "image": "/Folders.png"
+    "image": "/todo.png",
+    "difficulty": "Medium"
   }
 ]

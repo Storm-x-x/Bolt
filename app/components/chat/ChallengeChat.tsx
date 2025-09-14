@@ -60,22 +60,17 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
         <div ref={scrollRef} className="flex overflow-y-auto w-full h-full">
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
-              <div id="challenge-intro" className="mt-[26vh] max-w-chat mx-auto text-center">
-                <h1 className="text-5xl font-bold text-bolt-elements-textPrimary mb-4">
-                  {challenge.title}
-                </h1>
-                <div className="mb-6 text-bolt-elements-textSecondary space-y-2">
-                  <p className="text-lg">
-                    {challenge.question}
-                  </p>
-                  <p className="text-sm font-medium text-bolt-elements-textTertiary">
+              <div id="challenge-intro" className="mt-16 max-w-chat mx-auto text-center">
+                <div className="mb-4 text-bolt-elements-textSecondary space-y-2">
+                  <hr className="my-6 border-t border-bolt-elements-borderColor w-1/2 mx-auto" />
+                  <p className="text-sm font-medium text-bolt-elements-textTertiary mb-2">
                     Your challenge timer will start right after the first prompt
                   </p>
                 </div>
               </div>
             )}
             <div
-              className={classNames('pt-6 px-6', {
+              className={classNames('pt-10 px-6', {
                 'h-full flex flex-col': chatStarted,
               })}
             >
@@ -98,7 +93,7 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
               >
                 <div
                   className={classNames(
-                    'shadow-sm border border-bolt-elements-borderColor bg-bolt-elements-prompt-background backdrop-filter backdrop-blur-[8px] rounded-lg overflow-hidden',
+                    'shadow-sm border border-bolt-elements-borderColor bg-bolt-elements-prompt-background backdrop-filter backdrop-blur-[8px] rounded-lg overflow-hidden pb-8',
                   )}
                 >
                   <textarea

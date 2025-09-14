@@ -33,6 +33,21 @@ export default function Challenge() {
   return (
     <div className="flex flex-col h-full w-full">
       <Header />
+      <div className="max-w-2xl mx-auto w-full mt-8 mb-4 p-6 bg-bolt-elements-background-depth-2 rounded-xl shadow-lg flex flex-col items-center">
+        <img src={challenge.image} alt={challenge.title} className="h-32 w-auto mb-4 rounded-lg shadow" />
+        <h1 className="text-3xl font-bold text-bolt-elements-accent mb-2 text-center">{challenge.title}</h1>
+        <span
+          className={`text-lg font-semibold mb-4 ${
+            challenge.difficulty === 'Easy'
+              ? 'text-green-500'
+              : challenge.difficulty === 'Medium'
+                ? 'text-yellow-500'
+                : 'text-red-500'
+          }`}
+        >
+          {challenge.difficulty}
+        </span>
+      </div>
       <ClientOnly fallback={<ChallengeChatFallback challenge={challenge} />}>
         {() => <ChallengeChatClient challenge={challenge} />}
       </ClientOnly>

@@ -44,7 +44,7 @@ export default function ProfilePage() {
   const [showStats, setShowStats] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-bolt-elements-background-depth-1">
+    <div className="flex flex-col h-full min-h-screen w-full bg-bolt-elements-background-depth-1">
       <Header />
       <main className="flex-1 flex items-center justify-center">
         <section className="w-full max-w-4xl mx-auto bg-bolt-elements-background-depth-2 rounded-2xl border border-bolt-elements-borderColor shadow-lg overflow-hidden">

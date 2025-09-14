@@ -6,7 +6,7 @@ import { HeaderActionButtons } from './HeaderActionButtons.client';
 import { ChatDescription } from '~/lib/persistence/ChatDescription.client';
 import { Link, useLocation } from '@remix-run/react';
 
-export function Header() {
+export function Header({ className = '' }: { className?: string } = {}) {
   const chat = useStore(chatStore);
   const location = useLocation();
   const isOnChatPage = location.pathname.startsWith('/chat/');
@@ -14,7 +14,8 @@ export function Header() {
   return (
     <header
       className={classNames(
-        'flex bg-bolt-elements-background-depth-1 p-5 border-b h-[var(--header-height)] z-10',
+        'flex flex-col bg-bolt-elements-background-depth-1 p-0 border-b h-[var(--header-height)] z-10',
+        className,
         {
           'flex-col items-center': !isOnChatPage,
           'flex-row items-center': isOnChatPage,
@@ -38,9 +39,10 @@ export function Header() {
           <Link
             to="/profile"
             className={classNames(
-              'px-4 py-2 rounded text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 transition',
+              'px-6 py-2 rounded-r text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 transition',
               { 'bg-bolt-elements-background-depth-2 font-bold': location.pathname === '/profile' },
             )}
+            style={{ borderRadius: '0 0.5rem 0.5rem 0', borderBottom: 'none', borderTop: 'none' }}
           >
             Profile
           </Link>
