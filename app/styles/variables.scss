@@ -4,10 +4,10 @@
   --bolt-elements-borderColor: #E9D5FF;
   --bolt-elements-borderColorActive: #A78BFA;
 
-  --bolt-elements-background-depth-1: #F5F3FF;
-  --bolt-elements-background-depth-2: #EDE9FE;
-  --bolt-elements-background-depth-3: #DDD6FE;
-  --bolt-elements-background-depth-4: #F3E8FF;
+  --bolt-elements-background-depth-1: #0F0F23;
+  --bolt-elements-background-depth-2: #1E1B2F;
+  --bolt-elements-background-depth-3: #2D2A3E;
+  --bolt-elements-background-depth-4: rgba(139, 92, 246, 0.05);
 
   --bolt-elements-textPrimary: #3B0764;
   --bolt-elements-textSecondary: #7C3AED;
@@ -40,16 +40,16 @@
   --bolt-elements-loader-background: #E9D5FF;
   --bolt-elements-loader-progress: #A78BFA;
 
-  --bolt-elements-artifacts-background: #F5F3FF;
-  --bolt-elements-artifacts-backgroundHover: #F3E8FF;
+  --bolt-elements-artifacts-background: #0F0F23;
+  --bolt-elements-artifacts-backgroundHover: rgba(248, 250, 252, 0.05);
   --bolt-elements-artifacts-borderColor: var(--bolt-elements-borderColor);
   --bolt-elements-artifacts-inlineCode-background: #EDE9FE;
   --bolt-elements-artifacts-inlineCode-text: var(--bolt-elements-textPrimary);
 
-  --bolt-elements-actions-background: #F5F3FF;
+  --bolt-elements-actions-background: #0F0F23;
   --bolt-elements-actions-code-background: #7C3AED;
 
-  --bolt-elements-messages-background: #EDE9FE;
+  --bolt-elements-messages-background: #1E1B2F;
   --bolt-elements-messages-linkColor: #A78BFA;
   --bolt-elements-messages-code-background: #7C3AED;
   --bolt-elements-messages-inlineCode-background: #DDD6FE;
@@ -63,7 +63,7 @@
 
   --bolt-elements-dividerColor: #E9D5FF;
 
-  --bolt-elements-prompt-background: rgba(245, 243, 255, 0.8);
+  --bolt-elements-prompt-background: rgba(15, 15, 35, 0.8);
 
   --bolt-elements-sidebar-dropdownShadow: #E9D5FF;
   --bolt-elements-sidebar-buttonBackgroundDefault: #EDE9FE;
@@ -76,10 +76,10 @@
   --bolt-elements-preview-addressBar-text: var(--bolt-elements-textSecondary);
   --bolt-elements-preview-addressBar-textActive: var(--bolt-elements-textPrimary);
 
-  --bolt-elements-terminals-background: #F5F3FF;
+  --bolt-elements-terminals-background: #0F0F23;
   --bolt-elements-terminals-buttonBackground: var(--bolt-elements-background-depth-4);
 
-  --bolt-elements-cta-background: #EDE9FE;
+  --bolt-elements-cta-background: #1E1B2F;
   --bolt-elements-cta-text: #3B0764;
 
   /* Terminal Colors */
