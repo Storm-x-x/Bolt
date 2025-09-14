@@ -42,6 +42,8 @@ Here’s how to score prompts:
 You will rate the prompt from 1-5 and also provide a 1-5 word feedback to the user.
 
 If the user has a 1 star prompt and is completely off topic feel free to make a joke (1-5 words).
+
+NOTE! TYPOS SHOULD NEVER effect the mark
 `
 
     const result = await generateObject({
