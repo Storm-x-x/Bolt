@@ -4,10 +4,12 @@ export function ChallengeTimer({
   start,
   duration = 20 * 60,
   onExpire,
+  challenge,
 }: {
   start: boolean;
   duration?: number;
   onExpire?: () => void;
+  challenge: { id: string };
 }) {
   const [secondsLeft, setSecondsLeft] = useState(duration);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -49,10 +51,15 @@ export function ChallengeTimer({
   const seconds = secondsLeft % 60;
 
   return (
-    <div className="absolute top-6 right-6 z-50 bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary px-4 py-2 rounded-lg shadow border border-bolt-elements-borderColor font-bold text-lg flex items-center gap-2 select-none">
+    <div className="absolute top-6 right-6 z-50 bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary px-4 py-2 rounded-lg shadow font-bold text-lg flex items-center gap-2 select-none">
       <button
         className="mr-2 px-4 py-1 rounded bg-bolt-elements-button-primary-background hover:bg-bolt-elements-button-primary-backgroundHover text-bolt-elements-button-primary-text font-semibold shadow border border-bolt-elements-borderColor transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60"
-        onClick={() => window.dispatchEvent(new CustomEvent('challenge:submit'))}
+        onClick={() => {
+          if (challenge?.id) {
+            localStorage.setItem(`challenge-solved-${challenge.id}`, '1');
+            window.dispatchEvent(new CustomEvent('challenge:submit', { detail: { id: challenge.id } }));
+          }
+        }}
         type="button"
       >
         Submit

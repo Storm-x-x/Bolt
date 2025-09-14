@@ -30,21 +30,16 @@ function getRank(solved: number) {
   return 'Beginner';
 }
 
-type ProgressBarProps = { value: number; max: number; color: string };
-
-function ProgressBar({ value, max, color }: ProgressBarProps) {
-  const percent = Math.min(100, Math.round((value / max) * 100));
-  return (
-    <div className="w-32 h-3 bg-bolt-elements-background-depth-1 rounded-full overflow-hidden">
-      <div className={color + ' h-full rounded-full transition-all'} style={{ width: percent + '%' }} />
-    </div>
-  );
-}
+type Challenge = {
+  id: string;
+  title: string;
+  image: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  averageAccuracy: number;
+};
 
 export default function ProfilePage() {
-  const [showStats, setShowStats] = useState(false);
-
-  // Example weekly activity data
+  // example weekly activity data
   const weeklyActivity = [
     { week: 'Week 1', count: 2 },
     { week: 'Week 2', count: 5 },
@@ -55,33 +50,38 @@ export default function ProfilePage() {
     { week: 'Week 7', count: 8 },
   ];
 
-  // Get solved challenge IDs from sessionStorage
+  // get solved challenge IDs from localStorage
   const [solvedChallenges, setSolvedChallenges] = useState<string[]>([]);
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const solved: string[] = [];
 
-      for (let i = 0; i < sessionStorage.length; i++) {
-        const key = sessionStorage.key(i);
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
 
-        if (key && key.startsWith('solved-') && sessionStorage.getItem(key) === 'true') {
-          solved.push(key.replace('solved-', ''));
+        if (key && key.startsWith('challenge-solved-') && localStorage.getItem(key) === '1') {
+          solved.push(key.replace('challenge-solved-', ''));
         }
       }
       setSolvedChallenges(solved);
+
+      // dynamically import challenges.json to avoid static import issues
+      import('../../data/challenges.json').then((mod) => {
+        const data = (mod.default as any[]).map((c) => ({
+          ...c,
+          difficulty: (c.difficulty.charAt(0).toUpperCase() + c.difficulty.slice(1).toLowerCase()) as
+            | 'Easy'
+            | 'Medium'
+            | 'Hard',
+        }));
+        setChallenges(data);
+      });
     }
   }, []);
 
-  // Import challenges list from _index.tsx (copy here for now)
-  const challenges = [
-    { id: '1', title: 'Sales Dashboard', image: '/sales-dashboard.png', difficulty: 'Hard', averageAccuracy: 62 },
-    { id: '2', title: 'Login Box', image: '/login.png', difficulty: 'Medium', averageAccuracy: 91 },
-    { id: '3', title: 'Google Drive', image: '/Folders.png', difficulty: 'Medium', averageAccuracy: 87 },
-    { id: '4', title: 'Profile Page', image: '/profile.jpg', difficulty: 'Hard', averageAccuracy: 74 },
-    { id: '5', title: 'Counter', image: '/counter.gif', difficulty: 'Easy', averageAccuracy: 68 },
-    { id: '6', title: 'Weather Forecast', image: '/weather-app.png', difficulty: 'Medium', averageAccuracy: 41 },
-  ];
-  const solvedChallengeData = challenges.filter((c) => solvedChallenges.includes(c.id));
+  const solvedChallengeData: Challenge[] = challenges.filter((c: Challenge) => solvedChallenges.includes(c.id));
 
   return (
     <div className="flex flex-col h-full min-h-screen w-full bg-bolt-elements-background-depth-1">
@@ -179,8 +179,88 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+          {/* Solved Challenges List */}
+          <div className="w-full max-w-2xl mx-auto mt-8 mb-8 bg-bolt-elements-background-depth-1 rounded-xl border border-bolt-elements-borderColor shadow p-6">
+            <CollapsibleSolvedChallenges solvedChallengeData={solvedChallengeData} />
+          </div>
         </section>
       </main>
+    </div>
+  );
+}
+
+function CollapsibleSolvedChallenges({ solvedChallengeData }: { solvedChallengeData: Challenge[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="w-full">
+      <button
+        className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor text-bolt-elements-textPrimary text-lg font-bold shadow focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60 transition mb-2"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls="solved-challenges-list"
+      >
+        <span className="flex items-center gap-2">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" className="inline-block text-green-400">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+            <path
+              d="M7 13l3 3 7-7"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          Solved Challenges
+        </span>
+        <svg
+          className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          width="20"
+          height="20"
+          fill="none"
+          viewBox="0 0 20 20"
+        >
+          <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {open && (
+        <div id="solved-challenges-list" className="flex flex-col gap-5 mt-2">
+          {solvedChallengeData.length === 0 ? (
+            <div className="text-bolt-elements-textSecondary text-lg">You haven't solved any challenges yet.</div>
+          ) : (
+            solvedChallengeData.map((c) => (
+              <div
+                key={c.id}
+                className="flex items-center gap-5 bg-bolt-elements-background-depth-2 rounded-xl p-4 shadow border border-bolt-elements-borderColor hover:shadow-lg transition group"
+              >
+                <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-green-300 bg-white flex items-center justify-center shadow-md">
+                  <img src={c.image} alt={c.title} className="object-cover w-full h-full" />
+                </div>
+                <div className="flex-1 flex flex-col justify-center">
+                  <div className="font-bold text-bolt-elements-textPrimary text-lg mb-1 truncate" title={c.title}>
+                    {c.title}
+                  </div>
+                  <div className="flex items-center gap-3 mb-1">
+                    <span
+                      className={`text-sm font-semibold px-3 py-1 rounded-full ${
+                        c.difficulty === 'Easy'
+                          ? 'bg-green-100 text-green-700'
+                          : c.difficulty === 'Medium'
+                            ? 'bg-yellow-100 text-yellow-700'
+                            : 'bg-red-100 text-red-700'
+                      }`}
+                    >
+                      {c.difficulty}
+                    </span>
+                    <span className="text-xs text-bolt-elements-textSecondary bg-bolt-elements-background-depth-1 px-2 py-1 rounded-full">
+                      Accuracy: {c.averageAccuracy}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }
