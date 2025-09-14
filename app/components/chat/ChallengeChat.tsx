@@ -60,6 +60,7 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
           <ChallengeTimer
             start={chatStarted}
             duration={challenge.difficulty === 'Easy' ? 10 * 60 : challenge.difficulty === 'Medium' ? 15 * 60 : 20 * 60}
+            challenge={challenge}
           />
         )}
         <div ref={scrollRef} className="flex overflow-y-auto w-full h-full">
