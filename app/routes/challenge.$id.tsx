@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
+import { type LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { ChallengeChat as ChallengeChatFallback } from '~/components/chat/ChallengeChat';
@@ -24,7 +24,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response('Challenge not found', { status: 404 });
   }
 
-  return json({ challenge });
+  return { challenge };
 }
 
 export default function Challenge() {
