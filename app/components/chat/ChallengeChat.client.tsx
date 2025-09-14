@@ -148,9 +148,7 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
       return;
     }
 
-    await Promise.all([
-      animate('#challenge-intro', { opacity: 0, flex: 1 }, { duration: 0.2, ease: cubicEasingFn }),
-    ]);
+    await Promise.all([animate('#challenge-intro', { opacity: 0, flex: 1 }, { duration: 0.2, ease: cubicEasingFn })]);
 
     chatStore.setKey('started', true);
 
