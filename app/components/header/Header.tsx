@@ -49,8 +49,15 @@ export function Header() {
 
       {/* Content area - different layout for chat vs non-chat pages */}
       {isOnChatPage ? (
-        // Chat page: horizontal layout
+        // Chat page: horizontal layout with home button
         <>
+          <Link
+            to="/"
+            className="flex items-center p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 rounded-md transition-colors"
+            title="Go Home"
+          >
+            <div className="i-ph:arrow-left text-lg" />
+          </Link>
           <span className="flex-1 px-4 truncate text-center text-bolt-elements-textPrimary">
             <ClientOnly>{() => <ChatDescription />}</ClientOnly>
           </span>
