@@ -6,6 +6,7 @@ import { classNames } from '~/utils/classNames';
 import { type Challenge } from '~/lib/challenges';
 import { Messages } from './Messages.client';
 import { SendButton } from './SendButton.client';
+import { ChallengeTimer } from '~/components/challenge/ChallengeTimer';
 
 import styles from './BaseChat.module.scss';
 
@@ -55,6 +56,12 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
         )}
         data-chat-visible={showChat}
       >
+        {chatStarted && (
+          <ChallengeTimer
+            start={chatStarted}
+            duration={challenge.difficulty === 'Easy' ? 10 * 60 : challenge.difficulty === 'Medium' ? 15 * 60 : 20 * 60}
+          />
+        )}
         <div ref={scrollRef} className="flex overflow-y-auto w-full h-full">
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
@@ -68,10 +75,10 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
                   <h1 className="text-3xl text-white font-bold mb-4">{challenge.title}</h1>
                   <span
                     className={classNames(
-                      "inline-block px-3 py-1 rounded-full text-sm font-semibold",
-                      challenge.difficulty === "Easy" ? "bg-green-100 text-green-700" : "",
-                      challenge.difficulty === "Medium" ? "bg-yellow-100 text-yellow-800" : "",
-                      challenge.difficulty === "Hard" ? "bg-red-100 text-red-700" : ""
+                      'inline-block px-3 py-1 rounded-full text-sm font-semibold',
+                      challenge.difficulty === 'Easy' ? 'bg-green-100 text-green-700' : '',
+                      challenge.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' : '',
+                      challenge.difficulty === 'Hard' ? 'bg-red-100 text-red-700' : '',
                     )}
                   >
                     {challenge.difficulty}
