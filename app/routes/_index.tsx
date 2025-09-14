@@ -5,14 +5,8 @@ import { ChallengeCard } from '~/components/challenge/ChallengeCard';
 import { useNavigate, useLoaderData } from '@remix-run/react';
 import { getAllChallenges, type Challenge } from '~/lib/challenges';
 
-const difficultyOptions = ['All', 'Easy', 'Medium', 'Hard'] as const;
-const sortOptions = [
-  { value: 'title', label: 'Title' },
-  { value: 'difficulty', label: 'Difficulty' },
-];
-
 export const meta: MetaFunction = () => {
-  return [{ title: 'Bolt' }, { name: 'description', content: 'Talk with Bolt, an AI assistant from StackBlitz' }];
+  return [{ title: 'Promptly' }, { name: 'description', content: 'Test your vibe coding skills' }];
 };
 
 export const loader: LoaderFunction = async () => {
