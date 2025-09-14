@@ -1,6 +1,7 @@
 import { Header } from '~/components/header/Header';
 import { useState, useEffect } from 'react';
 import { WeeklyActivityChart } from '~/components/profile/WeeklyActivityChart';
+
 // dummy data for demonstration
 const userStats = {
   name: 'Azam Jawad Butt',
@@ -139,38 +140,42 @@ export default function ProfilePage() {
             className="flex flex-col md:flex-row gap-8 px-0 py-0 bg-bolt-elements-background-depth-1 items-center justify-center md:items-center md:justify-center min-h-[340px]"
             style={{ boxShadow: 'none', border: 'none' }}
           >
-            <div className="w-full md:w-1/2 px-10 py-8 flex items-center justify-center">
-              <WeeklyActivityChart data={weeklyActivity} small />
+            <div className="w-full md:w-1/2 flex items-center justify-center">
+              <div className="w-full max-w-xs md:max-w-sm h-[320px] flex items-center justify-center">
+                <WeeklyActivityChart data={weeklyActivity} />
+              </div>
             </div>
-            <div className="w-full md:w-1/2 px-10 py-8 flex flex-col justify-center">
-              <h2 className="text-xl font-bold text-bolt-elements-textPrimary mb-4 text-left">Statistics</h2>
-              <div className="overflow-x-auto w-full">
-                <table className="min-w-full text-lg text-left border-collapse">
-                  <thead>
-                    <tr className="bg-bolt-elements-background-depth-2">
-                      <th className="px-4 py-2 font-semibold text-white text-lg text-left">Category</th>
-                      <th className="px-4 py-2 font-semibold text-white text-lg text-left">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="px-4 py-2 text-white text-base">Average Acceptance Rate</td>
-                      <td className="px-4 py-2 text-white text-base">92%</td>
-                    </tr>
-                    <tr className="bg-bolt-elements-background-depth-2/50">
-                      <td className="px-4 py-2 text-white text-base">Longest Streak</td>
-                      <td className="px-4 py-2 text-white text-base">12 days</td>
-                    </tr>
-                    <tr>
-                      <td className="px-4 py-2 text-white text-base">Last Submission</td>
-                      <td className="px-4 py-2 text-white text-base">2 days ago</td>
-                    </tr>
-                    <tr className="bg-bolt-elements-background-depth-2/50">
-                      <td className="px-4 py-2 text-white text-base">Total Submissions</td>
-                      <td className="px-4 py-2 text-white text-base">128</td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div className="w-full md:w-1/2 flex flex-col justify-center items-center">
+              <div className="w-full max-w-xs md:max-w-sm h-[245px] flex flex-col justify-center bg-transparent rounded-xl p-4 shadow-md border border-bolt-elements-borderColor -mt-6">
+                <h2 className="text-lg font-bold text-bolt-elements-textPrimary mb-2 text-left">Statistics</h2>
+                <div className="overflow-x-auto w-full">
+                  <table className="min-w-full text-base text-left border-collapse">
+                    <thead>
+                      <tr className="bg-bolt-elements-background-depth-2">
+                        <th className="px-3 py-1 font-semibold text-white text-base text-left">Category</th>
+                        <th className="px-3 py-1 font-semibold text-white text-base text-left">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="px-3 py-1 text-white text-sm">Average Acceptance Rate</td>
+                        <td className="px-3 py-1 text-white text-sm">92%</td>
+                      </tr>
+                      <tr className="bg-bolt-elements-background-depth-2/50">
+                        <td className="px-3 py-1 text-white text-sm">Longest Streak</td>
+                        <td className="px-3 py-1 text-white text-sm">12 days</td>
+                      </tr>
+                      <tr>
+                        <td className="px-3 py-1 text-white text-sm">Last Submission</td>
+                        <td className="px-3 py-1 text-white text-sm">2 days ago</td>
+                      </tr>
+                      <tr className="bg-bolt-elements-background-depth-2/50">
+                        <td className="px-3 py-1 text-white text-sm">Total Submissions</td>
+                        <td className="px-3 py-1 text-white text-sm">128</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

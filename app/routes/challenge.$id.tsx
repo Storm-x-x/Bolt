@@ -3,7 +3,6 @@ import { useLoaderData } from '@remix-run/react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { ChallengeChat as ChallengeChatFallback } from '~/components/chat/ChallengeChat';
 import { ChallengeChatClient } from '~/components/chat/ChallengeChat.client';
-import { Header } from '~/components/header/Header';
 import { getChallengeById, type Challenge } from '~/lib/challenges';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -32,7 +31,6 @@ export default function Challenge() {
 
   return (
     <div className="flex flex-col h-full w-full">
-      <Header />
       <ClientOnly fallback={<ChallengeChatFallback challenge={challenge} />}>
         {() => <ChallengeChatClient challenge={challenge} />}
       </ClientOnly>
