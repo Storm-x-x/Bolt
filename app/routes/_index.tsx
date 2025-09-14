@@ -1,68 +1,10 @@
-import { json, type MetaFunction } from '@remix-run/cloudflare';
-import { ClientOnly } from 'remix-utils/client-only';
-import { BaseChat } from '~/components/chat/BaseChat';
-import { Chat } from '~/components/chat/Chat.client';
+import { type MetaFunction, type LoaderFunction } from '@remix-run/cloudflare';
 import { Header } from '~/components/header/Header';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChallengeCard } from '~/components/challenge/ChallengeCard';
-import { useNavigate } from '@remix-run/react';
+import { useNavigate, useLoaderData } from '@remix-run/react';
+import { getAllChallenges, type Challenge } from '~/lib/challenges';
 
-type Challenge = {
-  id: string;
-  title: string;
-  image: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  averageAccuracy: number;
-  description?: string;
-};
-
-const challenges: Challenge[] = [
-  {
-    id: 'counter',
-    title: 'Sales Dashboard',
-    image: '/sales-dashboard.png',
-    difficulty: 'Hard',
-    averageAccuracy: 62,
-  },
-  {
-    id: 'counter',
-    title: 'Login Box',
-    image: '/login.png',
-    difficulty: 'Easy',
-    averageAccuracy: 91,
-  },
-  {
-    id: 'counter',
-    title: 'Google Drive',
-    image: '/Folders.png',
-    difficulty: 'Easy',
-    averageAccuracy: 87,
-  },
-  {
-    id: 'counter',
-    title: 'Profile Page',
-    image: '/profile.jpg',
-    difficulty: 'Medium',
-    averageAccuracy: 74,
-    description: 'Determine whether an integer is a palindrome.',
-  },
-  {
-    id: 'counter',
-    title: 'Merge Intervals',
-    image: '/project-visibility.jpg',
-    difficulty: 'Medium',
-    averageAccuracy: 68,
-    description: 'Merge all overlapping intervals in a list of intervals.',
-  },
-  {
-    id: 'counter',
-    title: 'N-Queens',
-    image: '/social_preview_index.jpg',
-    difficulty: 'Hard',
-    averageAccuracy: 41,
-    description: 'Place N queens on an N×N chessboard so that no two queens threaten each other.',
-  },
-] as const;
 
 const difficultyOptions = ['All', 'Easy', 'Medium', 'Hard'] as const;
 const sortOptions = [
@@ -74,10 +16,14 @@ export const meta: MetaFunction = () => {
   return [{ title: 'Bolt' }, { name: 'description', content: 'Talk with Bolt, an AI assistant from StackBlitz' }];
 };
 
-export const loader = () => json({});
+export const loader: LoaderFunction = async () => {
+  const challenges = await getAllChallenges();
+  return { challenges };
+};
 
 export default function Index() {
   const navigate = useNavigate();
+  const { challenges } = useLoaderData<{ challenges: Challenge[] }>();
   const [difficulty, setDifficulty] = useState<'All' | 'Easy' | 'Medium' | 'Hard'>('All');
   const [sort, setSort] = useState<'title' | 'difficulty'>('title');
   const [search, setSearch] = useState('');
@@ -85,8 +31,7 @@ export default function Index() {
   const filtered = challenges.filter(
     (c) =>
       (difficulty === 'All' || c.difficulty === difficulty) &&
-      (c.title.toLowerCase().includes(search.toLowerCase()) ||
-        (c.description && c.description.toLowerCase().includes(search.toLowerCase()))),
+      c.title.toLowerCase().includes(search.toLowerCase()),
   );
   const sorted = [...filtered].sort((a, b) => {
     if (sort === 'title') {
