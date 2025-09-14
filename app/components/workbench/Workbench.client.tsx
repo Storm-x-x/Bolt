@@ -16,7 +16,7 @@ import { cubicEasingFn } from '~/utils/easings';
 import { renderLogger } from '~/utils/logger';
 import { useChatHistory } from '~/lib/persistence';
 import { description } from '~/lib/persistence/useChatHistory';
-import challengesData from '../../../data/challenges.json';
+import { getAllChallenges } from '~/lib/challenges';
 import { EditorPanel } from './EditorPanel';
 import { Preview } from './Preview';
 
@@ -60,13 +60,20 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
 
   const { chatData } = useChatHistory();
   const [showTarget, setShowTarget] = useState(false);
+  const [fallbackChallengeData, setFallbackChallengeData] = useState<any>(null);
 
-  // Fallback: Load challenge data directly if not available in chatData
   const currentDescription = useStore(description);
-  const fallbackChallengeData = challengesData.find(challenge =>
-    challenge.title === currentDescription ||
-    currentDescription?.includes(challenge.title)
-  );
+
+  useEffect(() => {
+    if (!chatData?.challengeData && currentDescription) {
+      getAllChallenges().then((challenges) => {
+        const found = challenges.find(
+          (challenge) => challenge.title === currentDescription || currentDescription?.includes(challenge.title),
+        );
+        setFallbackChallengeData(found);
+      });
+    }
+  }, [chatData?.challengeData, currentDescription]);
 
   const effectiveChallengeData = chatData?.challengeData || fallbackChallengeData;
   console.log('Workbench - effectiveChallengeData:', effectiveChallengeData);
@@ -142,7 +149,18 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
                     className="mr-1 text-sm flex items-center"
                     onClick={() => setShowTarget(!showTarget)}
                   >
-                    <div className="i-ph:target" />
+                    {showTarget ? (
+                      <div className="i-ph:user" />
+                    ) : effectiveChallengeData?.image ? (
+                      <img
+                        src={effectiveChallengeData.image}
+                        alt="Target"
+                        className="w-6 h-6 object-contain rounded shadow border border-bolt-elements-borderColor bg-white"
+                        style={{ background: 'white' }}
+                      />
+                    ) : (
+                      <div className="i-ph:target" />
+                    )}
                     {showTarget ? 'View Yours' : 'View Target'}
                   </PanelHeaderButton>
                 )}
