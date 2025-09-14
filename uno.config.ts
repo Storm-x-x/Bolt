@@ -214,12 +214,6 @@ export default defineConfig({
           prompt: {
             background: 'var(--bolt-elements-prompt-background)',
           },
-          sidebar: {
-            dropdownShadow: 'var(--bolt-elements-sidebar-dropdownShadow)',
-            buttonBackgroundDefault: 'var(--bolt-elements-sidebar-buttonBackgroundDefault)',
-            buttonBackgroundHover: 'var(--bolt-elements-sidebar-buttonBackgroundHover)',
-            buttonText: 'var(--bolt-elements-sidebar-buttonText)',
-          },
           cta: {
             background: 'var(--bolt-elements-cta-background)',
             text: 'var(--bolt-elements-cta-text)',
