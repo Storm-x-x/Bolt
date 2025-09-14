@@ -56,7 +56,7 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
         )}
         data-chat-visible={showChat}
       >
-        {chatStarted && (
+        {chatStarted && false && (
           <ChallengeTimer
             start={chatStarted}
             duration={challenge.difficulty === 'Easy' ? 10 * 60 : challenge.difficulty === 'Medium' ? 15 * 60 : 20 * 60}

@@ -1,30 +1,30 @@
 [
   {
-    "id": "sales-dashboard",
-    "title": "Sales Dashboard",
-    "image": "/sales-dashboard.png",
+    "id": "ride-booking",
+    "title": "Ride Booking ",
+    "image": "/ride_booking.png",
     "difficulty": "Hard",
     "averageAccuracy": 62
   },
   {
-    "id": "login-page",
-    "title": "Login Box",
-    "image": "/login.png",
+    "id": "contact-form",
+    "title": "Contact Form",
+    "image": "/contact.jpg",
     "difficulty": "Medium",
     "averageAccuracy": 91
   },
   {
-    "id": "google-drive",
-    "title": "Google Drive",
-    "image": "/Folders.png",
-    "difficulty": "Medium",
+    "id": "market-data",
+    "title": "Market Data",
+    "image": "/Market_data.png",
+    "difficulty": "Hard",
     "averageAccuracy": 87
   },
   {
-    "id": "profile-page",
-    "title": "Profile Page",
-    "image": "/profile.jpg",
-    "difficulty": "Hard",
+    "id": "user-profile",
+    "title": "User Profile",
+    "image": "/userprofile.jpg",
+    "difficulty": "Easy",
     "averageAccuracy": 74
   },
   {

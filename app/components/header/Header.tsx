@@ -6,7 +6,9 @@ export function Header({ className = '' }: { className?: string } = {}) {
     <header className={`w-full bg-[#201d2b] flex items-center justify-between px-8 py-4 shadow-md z-10 ${className}`}>
       <div className="flex items-center gap-3">
         <img src="/logoooo-removebg-preview.png" alt="Promptly Logo" className="h-9 w-9" />
-        <span className="text-xl font-extrabold text-white tracking-tight">Promptly</span>
+        <Link to="/" className="text-xl font-extrabold text-white tracking-tight hover:underline focus:outline-none">
+          Promptly
+        </Link>
       </div>
       <nav className="flex items-center gap-8">
         <Link

@@ -51,19 +51,7 @@ export function ChallengeTimer({
   const seconds = secondsLeft % 60;
 
   return (
-    <div className="absolute top-6 right-6 z-50 bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary px-4 py-2 rounded-lg shadow font-bold text-lg flex items-center gap-2 select-none">
-      <button
-        className="mr-2 px-4 py-1 rounded bg-bolt-elements-button-primary-background hover:bg-bolt-elements-button-primary-backgroundHover text-bolt-elements-button-primary-text font-semibold shadow border border-bolt-elements-borderColor transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60"
-        onClick={() => {
-          if (challenge?.id) {
-            localStorage.setItem(`challenge-solved-${challenge.id}`, '1');
-            window.dispatchEvent(new CustomEvent('challenge:submit', { detail: { id: challenge.id } }));
-          }
-        }}
-        type="button"
-      >
-        Submit
-      </button>
+    <div className="bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary px-4 py-2 rounded-lg shadow font-bold text-lg flex items-center gap-2 select-none">
       <svg width="20" height="20" fill="none" viewBox="0 0 20 20" className="inline-block mr-1">
         <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
         <path d="M10 5v5l3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
