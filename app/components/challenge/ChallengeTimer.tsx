@@ -1,18 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from '@remix-run/react';
+import { SubmissionConfirmation } from './SubmissionConfirmation';
 
 export function ChallengeTimer({
   start,
   duration = 20 * 60,
   onExpire,
   challenge,
+  onPreSubmission,
+  onSubmission,
 }: {
   start: boolean;
   duration?: number;
   onExpire?: () => void;
   challenge: { id: string };
+  onPreSubmission?: () => void;
+  onSubmission?: () => void;
 }) {
   const [secondsLeft, setSecondsLeft] = useState(duration);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!start) {
@@ -47,6 +55,35 @@ export function ChallengeTimer({
     };
   }, [start, onExpire]);
 
+  const handleSubmitClick = () => {
+    setShowConfirmation(true);
+  };
+
+  const handlePreSubmission = () => {
+    if (onPreSubmission) {
+      onPreSubmission();
+    }
+  };
+
+  const handleSubmission = () => {
+    if (onSubmission) {
+      onSubmission();
+    }
+
+    console.log(`Challenge: ${JSON.stringify(challenge)}`)
+
+    // Always execute the default submission logic
+    if (challenge?.id) {
+      localStorage.setItem(`challenge-solved-${challenge.id}`, '1');
+      window.dispatchEvent(new CustomEvent('challenge:submit', { detail: { id: challenge.id } }));
+    }
+
+    // TODO get the users mark here
+
+    // Redirect to landing page
+    navigate('/result?prompt_score=5&quality_score=100&speed_score=5');
+  };
+
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
 
@@ -54,12 +91,7 @@ export function ChallengeTimer({
     <div className="absolute top-6 right-6 z-50 bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary px-4 py-2 rounded-lg shadow font-bold text-lg flex items-center gap-2 select-none">
       <button
         className="mr-2 px-4 py-1 rounded bg-bolt-elements-button-primary-background hover:bg-bolt-elements-button-primary-backgroundHover text-bolt-elements-button-primary-text font-semibold shadow border border-bolt-elements-borderColor transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60"
-        onClick={() => {
-          if (challenge?.id) {
-            localStorage.setItem(`challenge-solved-${challenge.id}`, '1');
-            window.dispatchEvent(new CustomEvent('challenge:submit', { detail: { id: challenge.id } }));
-          }
-        }}
+        onClick={handleSubmitClick}
         type="button"
       >
         Submit
@@ -69,6 +101,14 @@ export function ChallengeTimer({
         <path d="M10 5v5l3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
       {minutes}:{seconds.toString().padStart(2, '0')}
+
+      <SubmissionConfirmation
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onPreSubmission={handlePreSubmission}
+        onSubmission={handleSubmission}
+        challenge={challenge}
+      />
     </div>
   );
 }
