@@ -245,8 +245,24 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory, chatData }
 
     setInput('');
 
-    // TODO: mark the prompt
-    sendPromptStatusToast('Great prompt!', 4, playSuccess, playFailure);
+    // Mark the prompt (non-blocking)
+    fetch('/api/mark-prompt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: _input, question: chatData?.challengeData?.title }),
+    })
+      .then((response) => response.json())
+      .then((data: any) => {
+        const message = data.message || 'Prompt evaluated';
+        const rating = data.rating || 3;
+        sendPromptStatusToast(message, rating, playSuccess, playFailure);
+      })
+      .catch((error) => {
+        console.error('Error marking prompt:', error);
+        sendPromptStatusToast('Unable to evaluate prompt', 2, playSuccess, playFailure);
+      });
 
     textareaRef.current?.blur();
   };
