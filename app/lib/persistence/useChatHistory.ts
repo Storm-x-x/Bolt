@@ -25,19 +25,10 @@ export const db = persistenceEnabled ? await openDatabase() : undefined;
 export const chatId = atom<string | undefined>(undefined);
 export const description = atom<string | undefined>(undefined);
 
-export function useChatHistory(idFromProps?: string) {
+export function useChatHistory() {
   const navigate = useNavigate();
-  let mixedId: string | undefined = idFromProps;
-
-  try {
-    if (!mixedId) {
-      // Only call useLoaderData if idFromProps is not provided
-      const data = useLoaderData<{ id?: string }>();
-      mixedId = data?.id;
-    }
-  } catch (e) {
-    // Not in a loader-backed route, ignore
-  }
+  const loaderData = useLoaderData<{ id?: string }>();
+  const { id: mixedId } = loaderData || {};
 
   const [initialMessages, setInitialMessages] = useState<Message[]>([]);
   const [ready, setReady] = useState<boolean>(false);
