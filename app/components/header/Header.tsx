@@ -1,95 +1,27 @@
-import { useStore } from '@nanostores/react';
-import { ClientOnly } from 'remix-utils/client-only';
-import { chatStore } from '~/lib/stores/chat';
-import { classNames } from '~/utils/classNames';
-import { HeaderActionButtons } from './HeaderActionButtons.client';
-import { ChatDescription } from '~/lib/persistence/ChatDescription.client';
 import { Link, useLocation } from '@remix-run/react';
 
 export function Header({ className = '' }: { className?: string } = {}) {
-  const chat = useStore(chatStore);
   const location = useLocation();
-  const isOnChatPage = location.pathname.startsWith('/chat/');
-
   return (
-    <header
-      className={classNames(
-        'flex flex-col bg-bolt-elements-background-depth-1 p-0 border-b h-[var(--header-height)] z-10',
-        className,
-        {
-          'flex-col items-center': !isOnChatPage,
-          'flex-row items-center': isOnChatPage,
-          'border-transparent': !chat.started,
-          'border-bolt-elements-borderColor': chat.started,
-        },
-      )}
-    >
-      {/* Navbar - hidden on chat pages */}
-      {!isOnChatPage && (
-        <nav className="flex gap-2 justify-center w-full">
-          <Link
-            to="/"
-            className={classNames(
-              'px-4 py-2 rounded text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 transition',
-              { 'bg-bolt-elements-background-depth-2 font-bold': location.pathname === '/' },
-            )}
-          >
-            Solve
-          </Link>
-          <Link
-            to="/profile"
-            className={classNames(
-              'px-6 py-2 rounded-r text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 transition',
-              { 'bg-bolt-elements-background-depth-2 font-bold': location.pathname === '/profile' },
-            )}
-            style={{ borderRadius: '0 0.5rem 0.5rem 0', borderBottom: 'none', borderTop: 'none' }}
-          >
-            Profile
-          </Link>
-        </nav>
-      )}
-
-      {/* Content area - different layout for chat vs non-chat pages */}
-      {isOnChatPage ? (
-        // Chat page: horizontal layout with home button
-        <>
-          <Link
-            to="/"
-            className="flex items-center p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 rounded-md transition-colors"
-            title="Go Home"
-          >
-            <div className="i-ph:arrow-left text-lg" />
-          </Link>
-          <span className="flex-1 px-4 truncate text-center text-bolt-elements-textPrimary">
-            <ClientOnly>{() => <ChatDescription />}</ClientOnly>
-          </span>
-          {chat.started && (
-            <ClientOnly>
-              {() => (
-                <div className="ml-auto">
-                  <HeaderActionButtons />
-                </div>
-              )}
-            </ClientOnly>
-          )}
-        </>
-      ) : (
-        // Non-chat pages: content row below navbar
-        <div className="flex items-center justify-between w-full">
-          <span className="flex-1 px-4 truncate text-center text-bolt-elements-textPrimary">
-            <ClientOnly>{() => <ChatDescription />}</ClientOnly>
-          </span>
-          {chat.started && (
-            <ClientOnly>
-              {() => (
-                <div className="mr-1">
-                  <HeaderActionButtons />
-                </div>
-              )}
-            </ClientOnly>
-          )}
-        </div>
-      )}
+    <header className={`w-full bg-[#201d2b] flex items-center justify-between px-8 py-4 shadow-md z-10 ${className}`}>
+      <div className="flex items-center gap-3">
+        <img src="/logoooo-removebg-preview.png" alt="Promptly Logo" className="h-9 w-9" />
+        <span className="text-xl font-extrabold text-white tracking-tight">Promptly</span>
+      </div>
+      <nav className="flex items-center gap-8">
+        <Link
+          to="/"
+          className={`text-white font-bold text-base px-4 py-2 rounded-full transition focus:outline-none ${location.pathname === '/' ? 'bg-white/10 shadow-md' : 'hover:bg-white/5'}`}
+        >
+          Challenges
+        </Link>
+        <Link
+          to="/profile"
+          className={`text-white font-bold text-base px-4 py-2 rounded-full transition focus:outline-none ${location.pathname === '/profile' ? 'bg-white/10 shadow-md' : 'hover:bg-white/5'}`}
+        >
+          Profile
+        </Link>
+      </nav>
     </header>
   );
 }
