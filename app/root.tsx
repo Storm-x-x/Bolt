@@ -1,83 +1,79 @@
-import { useStore } from '@nanostores/react';
-import type { LinksFunction } from '@remix-run/cloudflare';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
-import tailwindReset from '@unocss/reset/tailwind-compat.css?url';
-import { themeStore } from './lib/stores/theme';
-import { stripIndents } from './utils/stripIndent';
-import { createHead } from 'remix-island';
-import { useEffect } from 'react';
+// app/root.tsx
+import type { LinksFunction } from "@remix-run/cloudflare";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
+} from "@remix-run/react";
+import type { ReactNode } from "react";
 
-import reactToastifyStyles from 'react-toastify/dist/ReactToastify.css?url';
-import globalStyles from './styles/index.scss?url';
-import xtermStyles from '@xterm/xterm/css/xterm.css?url';
+// Side-effect CSS imports (keep these; no ?url)
+import "@unocss/reset/tailwind.css";
+import "virtual:uno.css";
 
-import 'virtual:uno.css';
+import { DEFAULT_THEME, kTheme } from "~/lib/stores/theme";
+
+const themeInitScript = `(() => {
+  try {
+    const storedTheme = localStorage.getItem(${JSON.stringify(kTheme)});
+    if (storedTheme) {
+      document.documentElement.setAttribute('data-theme', storedTheme);
+    }
+  } catch {}
+})();`;
 
 export const links: LinksFunction = () => [
-  {
-    rel: 'icon',
-    href: '/favicon.svg',
-    type: 'image/svg+xml',
-  },
-  { rel: 'stylesheet', href: reactToastifyStyles },
-  { rel: 'stylesheet', href: tailwindReset },
-  { rel: 'stylesheet', href: globalStyles },
-  { rel: 'stylesheet', href: xtermStyles },
-  {
-    rel: 'preconnect',
-    href: 'https://fonts.googleapis.com',
-  },
-  {
-    rel: 'preconnect',
-    href: 'https://fonts.gstatic.com',
-    crossOrigin: 'anonymous',
-  },
-  {
-    rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-  },
+  { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
 ];
 
-const inlineThemeCode = stripIndents`
-  setTutorialKitTheme();
-
-  function setTutorialKitTheme() {
-    let theme = localStorage.getItem('bolt_theme');
-
-    if (!theme) {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
-    document.querySelector('html')?.setAttribute('data-theme', theme);
-  }
-`;
-
-export const Head = createHead(() => (
-  <>
-    <meta charSet="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <Meta />
-    <Links />
-    <script dangerouslySetInnerHTML={{ __html: inlineThemeCode }} />
-  </>
-));
-
-export function Layout({ children }: { children: React.ReactNode }) {
-  const theme = useStore(themeStore);
-
-  useEffect(() => {
-    document.querySelector('html')?.setAttribute('data-theme', theme);
-  }, [theme]);
-
+// 👇 This is what entry.server.tsx expects to exist
+export default function App() {
   return (
-    <>
-      {children}
-      <ScrollRestoration />
-      <Scripts />
-    </>
+    <Layout>
+      <Outlet />
+    </Layout>
   );
 }
 
-export default function App() {
-  return <Outlet />;
+export function Layout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en" data-theme={DEFAULT_THEME}>
+      <head>
+        <Meta />
+        <Links />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body className="min-h-dvh bg-neutral-950 text-white antialiased">
+        <div id="root" className="h-full w-full">
+          {children}
+        </div>
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  let message = "Something went wrong";
+
+  if (isRouteErrorResponse(error)) {
+    message = `${error.status} ${error.statusText}`;
+  } else if (error instanceof Error) {
+    message = error.message;
+  }
+
+  return (
+    <Layout>
+      <div className="flex h-full flex-col items-center justify-center gap-2 p-6 text-center">
+        <h1 className="text-2xl font-semibold">Application error</h1>
+        <p className="max-w-lg text-balance text-neutral-300">{message}</p>
+      </div>
+    </Layout>
+  );
 }
