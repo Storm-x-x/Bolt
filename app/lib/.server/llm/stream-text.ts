@@ -33,10 +33,10 @@ export function streamText(messages: Messages, env: Env, options?: StreamingOpti
     }
     
     return _streamText({
-      model: getAIStupidLevelModel(apiKey, modelName),
+      model: getAIStupidLevelModel(apiKey, modelName) as any,
       system: getSystemPrompt(),
       maxTokens: MAX_TOKENS,
-      messages: convertToCoreMessages(messages),
+      messages: convertToCoreMessages(messages as any),
       ...options,
     });
   }
@@ -49,13 +49,13 @@ export function streamText(messages: Messages, env: Env, options?: StreamingOpti
   }
   
   return _streamText({
-    model: getAnthropicModel(anthropicApiKey),
+    model: getAnthropicModel(anthropicApiKey) as any,
     system: getSystemPrompt(),
     maxTokens: MAX_TOKENS,
     headers: {
       'anthropic-beta': 'max-tokens-3-5-sonnet-2024-07-15',
     },
-    messages: convertToCoreMessages(messages),
+    messages: convertToCoreMessages(messages as any),
     ...options,
   });
 }
