@@ -1,6 +1,6 @@
 import { streamText as _streamText, convertToCoreMessages } from 'ai';
-import { getAPIKey } from '~/lib/.server/llm/api-key';
-import { getAnthropicModel } from '~/lib/.server/llm/model';
+import { getAPIKey, getProvider, getAIStupidLevelModel as getAIStupidLevelModelName } from '~/lib/.server/llm/api-key';
+import { getAnthropicModel, getAIStupidLevelModel } from '~/lib/.server/llm/model';
 import { MAX_TOKENS } from './constants';
 import { getSystemPrompt } from './prompts';
 
@@ -22,8 +22,34 @@ export type Messages = Message[];
 export type StreamingOptions = Omit<Parameters<typeof _streamText>[0], 'model'>;
 
 export function streamText(messages: Messages, env: Env, options?: StreamingOptions) {
+  const provider = getProvider(env);
+  
+  if (provider === 'aistupidlevel') {
+    const modelName = getAIStupidLevelModelName(env);
+    const apiKey = getAPIKey(env, 'aistupidlevel');
+    
+    if (!apiKey) {
+      throw new Error('AI Stupid Level API key is required when using aistupidlevel provider');
+    }
+    
+    return _streamText({
+      model: getAIStupidLevelModel(apiKey, modelName),
+      system: getSystemPrompt(),
+      maxTokens: MAX_TOKENS,
+      messages: convertToCoreMessages(messages),
+      ...options,
+    });
+  }
+  
+  // Default to Anthropic
+  const anthropicApiKey = getAPIKey(env, 'anthropic');
+  
+  if (!anthropicApiKey) {
+    throw new Error('Anthropic API key is required');
+  }
+  
   return _streamText({
-    model: getAnthropicModel(getAPIKey(env)),
+    model: getAnthropicModel(anthropicApiKey),
     system: getSystemPrompt(),
     maxTokens: MAX_TOKENS,
     headers: {
